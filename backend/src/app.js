@@ -1,31 +1,49 @@
-const express =
-  require("express");
+const express = require("express");
+const cors = require("cors");
+const path = require("path");
 
-const cors =
-  require("cors");
+const app = express();
 
-const app =
-  express();
-
-const path =
-  require("path");
-
-const printRequestRoutes =
-  require(
-    "./routes/printRequest.routes"
-  );
-
-// MIDDLEWARE
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "https://smart-campus-connect-iota.vercel.app",
-      "https://campusconnect-d0yzssavg-anjani-s-campusproject.vercel.app",
-    ],
-    credentials: true,
-  })
+/* ROUTES */
+const printRequestRoutes = require(
+  "./routes/printRequest.routes"
 );
+
+const userRoutes = require(
+  "./routes/user.routes"
+);
+
+const orderRoutes = require(
+  "./routes/order.routes"
+);
+
+const foodRoutes = require(
+  "./routes/food.routes"
+);
+
+const libraryRoutes = require(
+  "./routes/library.routes"
+);
+
+const bookRoutes = require(
+  "./routes/book.routes"
+);
+
+const busRoutes = require(
+  "./routes/bus.routes"
+);
+
+const stationeryRoutes = require(
+  "./routes/stationery.routes"
+);
+
+const stationeryOrderRoutes = require(
+  "./routes/stationeryOrder.routes"
+);
+
+/* MIDDLEWARE */
+
+app.use(cors());
 
 app.use(express.json());
 
@@ -45,82 +63,21 @@ app.use(
   )
 );
 
-// ROUTES
-const userRoutes =
-  require(
-    "./routes/user.routes"
-  );
+/* API ROUTES */
 
-const orderRoutes =
-  require(
-    "./routes/order.routes"
-  );
+app.use("/", userRoutes);
 
-const foodRoutes =
-  require(
-    "./routes/food.routes"
-  );
+app.use("/", orderRoutes);
 
-const libraryRoutes =
-  require(
-    "./routes/library.routes"
-  );
+app.use("/", foodRoutes);
 
-const bookRoutes =
-  require(
-    "./routes/book.routes"
-  );
+app.use("/library", libraryRoutes);
 
-const busRoutes =
-  require(
-    "./routes/bus.routes"
-  );
+app.use("/books", bookRoutes);
 
-const stationeryRoutes =
-  require(
-    "./routes/stationery.routes"
-  );
+app.use("/buses", busRoutes);
 
-  const stationeryOrderRoutes =
-  require(
-    "./routes/stationeryOrder.routes"
-  );
-
-// USE ROUTES
-app.use(
-  "/",
-  userRoutes
-);
-
-app.use(
-  "/",
-  orderRoutes
-);
-
-app.use(
-  "/",
-  foodRoutes
-);
-
-app.use(
-  "/library",
-  libraryRoutes
-);
-
-app.use(
-  "/books",
-  bookRoutes
-);
-
-app.use(
-  "/buses",
-  busRoutes
-);
-
-app.use(
-  "/stationery",
-  stationeryRoutes
-);
+app.use("/stationery", stationeryRoutes);
 
 app.use(
   "/stationery-orders",
@@ -132,5 +89,4 @@ app.use(
   printRequestRoutes
 );
 
-module.exports =
-  app;
+module.exports = app;
