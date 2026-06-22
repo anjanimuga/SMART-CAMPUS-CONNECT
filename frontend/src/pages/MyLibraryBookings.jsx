@@ -7,11 +7,7 @@ import {
   motion,
 } from "framer-motion";
 
-import {
-  BookmarkCheck,
-  Clock3,
-  Armchair,
-} from "lucide-react";
+
 
 import API from "../services/api";
 
@@ -95,265 +91,235 @@ export default function MyLibraryBookings() {
 
     };
 
-  return (
+ return (
 
-    <div className="min-h-screen bg-[#f6f7fb] px-8 py-10 font-['Outfit'] overflow-hidden relative">
+  <div className="min-h-screen bg-[#f7f6f2]">
 
-      {/* LIGHT EFFECTS */}
+    <div className="max-w-7xl mx-auto px-8 py-12">
 
-      <div className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full bg-blue-100/50 blur-3xl" />
+      {/* HEADER */}
 
-      <div className="absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-violet-100/40 blur-3xl" />
+      <div className="mb-12">
 
-      <div className="relative z-10 max-w-6xl mx-auto">
+        <h1
+          className="text-5xl text-[#111111] mb-3"
+          style={{
+            fontFamily:
+              "Libre Baskerville",
+          }}
+        >
+          My Bookings
+        </h1>
 
-        {/* HEADER */}
+        <p className="text-gray-500 text-lg">
+          Manage and monitor your active
+          library seat reservations.
+        </p>
 
-        <div className="mb-16">
+      </div>
 
-          <div className="inline-flex items-center gap-3 bg-white border border-[#e5e7eb] px-5 py-3 rounded-full shadow-sm mb-6">
+      {/* STATS */}
 
-            <BookmarkCheck
-              size={18}
-              className="text-[#4f46e5]"
-            />
+      <div className="grid md:grid-cols-3 gap-6 mb-12">
 
-            <p className="text-[#6b7280] font-medium text-sm">
+        <div className="bg-white rounded-[28px] border border-[#ece7df] p-8">
 
-              Active Seat Reservations
+          <p className="text-gray-500 mb-3">
+            Active Bookings
+          </p>
 
-            </p>
+          <h2 className="text-5xl font-bold text-[#18344f]">
+            {mySeats.length}
+          </h2>
 
-          </div>
+        </div>
 
-          <h1 className="text-[65px] lg:text-[85px] leading-[0.95] font-black tracking-tight text-[#111827] mb-6">
+        <div className="bg-white rounded-[28px] border border-[#ece7df] p-8">
 
-            My
-            <br />
+          <p className="text-gray-500 mb-3">
+            Status
+          </p>
 
-            <span className="bg-gradient-to-r from-[#4f46e5] to-[#7c3aed] bg-clip-text text-transparent">
+          <h2 className="text-3xl font-bold text-green-600">
+            Active
+          </h2>
 
-              Bookings
+        </div>
 
-            </span>
+        <div className="bg-white rounded-[28px] border border-[#ece7df] p-8">
 
-          </h1>
+          <p className="text-gray-500 mb-3">
+            Auto Refresh
+          </p>
 
-          <p className="text-xl text-[#6b7280] leading-relaxed max-w-2xl">
+          <h2 className="text-3xl font-bold text-[#18344f]">
+            Live
+          </h2>
 
-            View, track and manage your active library study space reservations.
+        </div>
 
+      </div>
+
+      {/* EMPTY STATE */}
+
+      {mySeats.length === 0 ? (
+
+        <div
+          className="
+          bg-white
+          rounded-[28px]
+          border border-[#ece7df]
+          p-16
+          text-center
+          "
+        >
+
+          <h2
+            className="text-4xl mb-4"
+            style={{
+              fontFamily:
+                "Libre Baskerville",
+            }}
+          >
+            No Active Bookings
+          </h2>
+
+          <p className="text-gray-500">
+            You currently don't have any
+            reserved library seats.
           </p>
 
         </div>
 
-        {
+      ) : (
 
-          mySeats.length === 0 ? (
+        <div className="grid md:grid-cols-2 gap-8">
 
-            <div className="bg-white/80 backdrop-blur-2xl border border-white rounded-[36px] p-14 text-center shadow-[0_15px_50px_rgba(0,0,0,0.05)]">
+          {mySeats.map((seat) => (
 
-              <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-[#eef2ff] to-[#ede9fe] flex items-center justify-center mx-auto mb-8">
+            <div
+              key={seat._id}
+              className="
+              bg-white
+              rounded-[28px]
+              border border-[#ece7df]
+              p-8
+              shadow-sm
+              hover:shadow-xl
+              transition-all
+              duration-300
+              "
+            >
 
-                <Armchair
-                  size={40}
-                  className="text-[#4f46e5]"
-                />
+              <div className="flex justify-between items-center mb-6">
+
+                <h2
+                  className="text-3xl"
+                  style={{
+                    fontFamily:
+                      "Libre Baskerville",
+                  }}
+                >
+                  Seat {seat.seatNumber}
+                </h2>
+
+                <span
+                  className="
+                  bg-green-100
+                  text-green-700
+                  px-4 py-2
+                  rounded-full
+                  text-sm
+                  "
+                >
+                  Active
+                </span>
 
               </div>
 
-              <h2 className="text-4xl font-black tracking-tight text-[#111827] mb-5">
-
-                No Active Bookings
-
-              </h2>
-
-              <p className="text-[#6b7280] text-lg">
-
-                You currently have no reserved library seats.
-
+              <p className="text-gray-500 mb-2">
+                Floor {seat.floor}
               </p>
 
-            </div>
+              <p className="text-gray-400 mb-8">
+                {seat.section}
+              </p>
 
-          ) : (
+              <div className="grid grid-cols-2 gap-4 mb-8">
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div
+                  className="
+                  bg-[#f7f6f2]
+                  rounded-2xl
+                  p-4
+                  "
+                >
 
-              {mySeats.map(
-                (
-                  seat,
-                  index
-                ) => (
+                  <p className="text-xs text-gray-400 mb-2">
+                    BOOKED AT
+                  </p>
 
-                  <motion.div
-                    key={seat._id}
-                    initial={{
-                      opacity: 0,
-                      y: 30,
-                    }}
-                    animate={{
-                      opacity: 1,
-                      y: 0,
-                    }}
-                    transition={{
-                      duration: 0.4,
-                      delay:
-                        index * 0.05,
-                    }}
-                    whileHover={{
-                      y: -8,
-                    }}
-                    className="bg-white/80 backdrop-blur-2xl border border-white rounded-[34px] p-8 shadow-[0_15px_50px_rgba(0,0,0,0.05)] transition duration-500"
-                  >
+                  <p className="text-sm font-medium">
+                    {new Date(
+                      seat.bookedAt
+                    ).toLocaleString()}
+                  </p>
 
-                    {/* TOP */}
+                </div>
 
-                    <div className="flex justify-between items-start mb-8">
+                <div
+                  className="
+                  bg-[#f7f6f2]
+                  rounded-2xl
+                  p-4
+                  "
+                >
 
-                      <div>
+                  <p className="text-xs text-gray-400 mb-2">
+                    EXPIRES
+                  </p>
 
-                        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#eef2ff] to-[#ede9fe] flex items-center justify-center mb-5">
+                  <p className="text-sm font-medium">
+                    {new Date(
+                      seat.expiryTime
+                    ).toLocaleString()}
+                  </p>
 
-                          <Armchair
-                            size={28}
-                            className="text-[#4f46e5]"
-                          />
+                </div>
 
-                        </div>
+              </div>
 
-                        <h2 className="text-4xl font-black tracking-tight text-[#111827] mb-3">
-
-                          Seat
-                          {" "}
-                          {
-                            seat.seatNumber
-                          }
-
-                        </h2>
-
-                        <p className="text-[#6b7280] font-medium">
-
-                          Floor:
-                          {" "}
-                          {
-                            seat.floor
-                          }
-
-                        </p>
-
-                        <p className="text-[#9ca3af] mt-2">
-
-                          {
-                            seat.section
-                          }
-
-                        </p>
-
-                      </div>
-
-                      <div className="bg-green-100 text-green-700 px-5 py-2 rounded-full text-sm font-semibold">
-
-                        Active
-
-                      </div>
-
-                    </div>
-
-                    {/* TIMINGS */}
-
-                    <div className="space-y-5 mb-8">
-
-                      <div className="bg-[#f9fafb] border border-[#f3f4f6] rounded-2xl p-5">
-
-                        <div className="flex items-center gap-3 mb-3">
-
-                          <Clock3
-                            size={18}
-                            className="text-[#4f46e5]"
-                          />
-
-                          <p className="text-[#9ca3af] text-sm font-medium">
-
-                            Booked At
-
-                          </p>
-
-                        </div>
-
-                        <p className="text-[#111827] font-semibold">
-
-                          {
-                            new Date(
-                              seat.bookedAt
-                            ).toLocaleString()
-                          }
-
-                        </p>
-
-                      </div>
-
-                      <div className="bg-[#f9fafb] border border-[#f3f4f6] rounded-2xl p-5">
-
-                        <div className="flex items-center gap-3 mb-3">
-
-                          <Clock3
-                            size={18}
-                            className="text-[#7c3aed]"
-                          />
-
-                          <p className="text-[#9ca3af] text-sm font-medium">
-
-                            Expires At
-
-                          </p>
-
-                        </div>
-
-                        <p className="text-[#111827] font-semibold">
-
-                          {
-                            new Date(
-                              seat.expiryTime
-                            ).toLocaleString()
-                          }
-
-                        </p>
-
-                      </div>
-
-                    </div>
-
-                    {/* BUTTON */}
-
-                    <button
-                      onClick={() =>
-                        releaseSeat(
-                          seat._id
-                        )
-                      }
-                      className="w-full bg-gradient-to-r from-red-500 to-rose-500 text-white py-4 rounded-2xl font-semibold shadow-[0_10px_30px_rgba(239,68,68,0.25)] hover:scale-[1.02] transition duration-300"
-                    >
-
-                      Release Seat
-
-                    </button>
-
-                  </motion.div>
-
-                )
-              )}
+              <button
+                onClick={() =>
+                  releaseSeat(
+                    seat._id
+                  )
+                }
+                className="
+                w-full
+                py-3
+                rounded-full
+                bg-red-500
+                text-white
+                hover:bg-red-600
+                transition
+                "
+              >
+                Release Seat
+              </button>
 
             </div>
 
-          )
+          ))}
 
-        }
+        </div>
 
-      </div>
+      )}
 
     </div>
 
-  );
+  </div>
+
+);
 
 }

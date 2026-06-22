@@ -122,7 +122,7 @@ export default function Cart() {
 
         console.log(error);
 
-        alert("Order failed");
+        toast.error("Order failed");
 
       }
 

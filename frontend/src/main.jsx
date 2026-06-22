@@ -8,6 +8,9 @@ import { CartProvider } from "./context/CartContext";
 
 import { Toaster } from "react-hot-toast";
 
+import "@fontsource/inter";
+import "@fontsource/libre-baskerville";
+
 ReactDOM.createRoot(
   document.getElementById("root")
 ).render(

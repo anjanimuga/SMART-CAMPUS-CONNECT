@@ -12,6 +12,7 @@ import {
   motion,
 } from "framer-motion";
 
+
 import {
   IndianRupee,
   ShoppingBag,
@@ -339,7 +340,7 @@ export default function Admin() {
 
   return (
 
-    <div className="min-h-screen bg-[#f6f7fb] font-['Outfit'] text-[#111111] px-8 py-8">
+   <div className="min-h-screen bg-[#f6f7fb] px-8 py-8 font-['Outfit'] text-[#111111]">
 
       <div className="max-w-7xl mx-auto">
 

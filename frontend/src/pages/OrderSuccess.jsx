@@ -12,6 +12,8 @@ import {
   ClipboardList,
 } from "lucide-react";
 
+
+
 export default function OrderSuccess() {
 
   const location = useLocation();
@@ -110,6 +112,8 @@ export default function OrderSuccess() {
               Order Successfully Placed
 
             </div>
+
+            
 
             <h1 className="text-6xl font-black text-[#1f1b16] tracking-tight mb-5">
 

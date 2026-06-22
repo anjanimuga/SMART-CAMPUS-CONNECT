@@ -1,27 +1,11 @@
-import {
-  useState,
-} from "react";
-
-import {
-  useNavigate,
-} from "react-router-dom";
-
-import {
-  motion,
-} from "framer-motion";
-
-import {
-  User,
-  Mail,
-  Lock,
-  GraduationCap,
-  Hash,
-  Phone,
-} from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 import API from "../services/api";
-
 import toast from "react-hot-toast";
+
+import campusHero from "../assets/campus-hero.jpg";
 
 export default function Register() {
 
@@ -62,16 +46,20 @@ export default function Register() {
           form
         );
 
-        toast.success("Registration Successful");
+        toast.success(
+          "Registration Successful"
+        );
 
-        navigate("/");
+        navigate(
+          "/login"
+        );
 
       } catch (error) {
 
-      toast.error(
-  error.response?.data?.message ||
-  "Registration Failed"
-)
+        toast.error(
+          error.response?.data?.message ||
+          "Registration Failed"
+        );
 
       }
 
@@ -79,242 +67,178 @@ export default function Register() {
 
   return (
 
-    <div className="min-h-screen bg-[#f5f7fb] flex items-center justify-center px-6 py-12 overflow-hidden relative font-['Outfit']">
+    <div className="relative min-h-screen overflow-hidden">
 
       {/* BACKGROUND */}
 
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
+      <img
+        src={campusHero}
+        alt="Campus"
+        className="absolute inset-0 w-full h-full object-cover"
+      />
 
-        <div className="absolute top-[-120px] right-[-120px] w-[320px] h-[320px] bg-[#dbeafe] rounded-full blur-3xl opacity-60" />
+      {/* OVERLAY */}
 
-        <div className="absolute bottom-[-120px] left-[-120px] w-[320px] h-[320px] bg-[#ede9fe] rounded-full blur-3xl opacity-40" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/45 to-black/70" />
 
-      </div>
+      {/* CONTENT */}
 
-      {/* CARD */}
+      <div className="relative z-10 min-h-screen flex items-center justify-center px-6 py-12">
 
-      <motion.div
-        initial={{
-          opacity: 0,
-          y: 30,
-        }}
-        animate={{
-          opacity: 1,
-          y: 0,
-        }}
-        transition={{
-          duration: 0.5,
-        }}
-        className="relative z-10 w-full max-w-3xl bg-white/80 backdrop-blur-2xl border border-white rounded-[38px] shadow-[0_20px_80px_rgba(0,0,0,0.08)] p-10 md:p-14"
-      >
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: 20,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          transition={{
+            duration: 0.5,
+          }}
+          className="w-full max-w-3xl"
+        >
 
-        {/* TOP */}
+          <div className="text-center mb-10">
 
-        <div className="text-center mb-12">
+            <p className="text-white/70 uppercase tracking-[0.35em] text-xs mb-5">
 
-          <div className="inline-flex items-center gap-3 bg-[#f4f7fb] border border-[#ececec] px-5 py-3 rounded-full mb-6">
+              Student Registration
 
-            <GraduationCap
-              size={20}
-              className="text-slate-700"
-            />
+            </p>
 
-            <span className="text-slate-700 font-medium">
+            <h1
+              className="text-white text-5xl lg:text-6xl mb-4"
+              style={{
+                fontFamily:
+                  "Libre Baskerville",
+              }}
+            >
 
               CampusConnect
 
-            </span>
+            </h1>
+
+            <p className="text-white/80 text-lg">
+
+              Create Your Student Account
+
+            </p>
 
           </div>
 
-          <h1 className="text-5xl md:text-6xl font-black tracking-tight text-[#111111] mb-4">
-
-            Create Account
-
-          </h1>
-
-          <p className="text-[#666666] text-lg">
-
-            Join your smart campus ecosystem.
-
-          </p>
-
-        </div>
-
-        {/* FORM */}
-
-        <form
-          onSubmit={handleSubmit}
-          className="grid grid-cols-1 md:grid-cols-2 gap-5"
-        >
-
-          {/* NAME */}
-
-          <div className="relative">
-
-            <User
-              size={18}
-              className="absolute left-5 top-5 text-[#888]"
-            />
+          <form
+            onSubmit={
+              handleSubmit
+            }
+            className="grid grid-cols-1 md:grid-cols-2 gap-4"
+          >
 
             <input
               type="text"
               name="name"
               placeholder="Full Name"
-              onChange={handleChange}
-              className="w-full bg-[#f7f7f7] border border-[#e8e8e8] rounded-2xl pl-14 pr-5 py-4 outline-none focus:border-slate-400 transition"
+              onChange={
+                handleChange
+              }
+              className="px-5 py-4 rounded-md bg-white/95 text-black outline-none"
               required
-            />
-
-          </div>
-
-          {/* EMAIL */}
-
-          <div className="relative">
-
-            <Mail
-              size={18}
-              className="absolute left-5 top-5 text-[#888]"
             />
 
             <input
               type="email"
               name="email"
-              placeholder="Email"
-              onChange={handleChange}
-              className="w-full bg-[#f7f7f7] border border-[#e8e8e8] rounded-2xl pl-14 pr-5 py-4 outline-none focus:border-slate-400 transition"
+              placeholder="Email Address"
+              onChange={
+                handleChange
+              }
+              className="px-5 py-4 rounded-md bg-white/95 text-black outline-none"
               required
-            />
-
-          </div>
-
-          {/* PASSWORD */}
-
-          <div className="relative">
-
-            <Lock
-              size={18}
-              className="absolute left-5 top-5 text-[#888]"
             />
 
             <input
               type="password"
               name="password"
               placeholder="Password"
-              onChange={handleChange}
-              className="w-full bg-[#f7f7f7] border border-[#e8e8e8] rounded-2xl pl-14 pr-5 py-4 outline-none focus:border-slate-400 transition"
+              onChange={
+                handleChange
+              }
+              className="px-5 py-4 rounded-md bg-white/95 text-black outline-none"
               required
-            />
-
-          </div>
-
-          {/* BRANCH */}
-
-          <div className="relative">
-
-            <GraduationCap
-              size={18}
-              className="absolute left-5 top-5 text-[#888]"
             />
 
             <input
               type="text"
               name="branch"
               placeholder="Branch"
-              onChange={handleChange}
-              className="w-full bg-[#f7f7f7] border border-[#e8e8e8] rounded-2xl pl-14 pr-5 py-4 outline-none focus:border-slate-400 transition"
+              onChange={
+                handleChange
+              }
+              className="px-5 py-4 rounded-md bg-white/95 text-black outline-none"
               required
-            />
-
-          </div>
-
-          {/* YEAR */}
-
-          <div className="relative">
-
-            <Hash
-              size={18}
-              className="absolute left-5 top-5 text-[#888]"
             />
 
             <input
               type="text"
               name="year"
               placeholder="Year"
-              onChange={handleChange}
-              className="w-full bg-[#f7f7f7] border border-[#e8e8e8] rounded-2xl pl-14 pr-5 py-4 outline-none focus:border-slate-400 transition"
+              onChange={
+                handleChange
+              }
+              className="px-5 py-4 rounded-md bg-white/95 text-black outline-none"
               required
-            />
-
-          </div>
-
-          {/* ROLL */}
-
-          <div className="relative">
-
-            <Hash
-              size={18}
-              className="absolute left-5 top-5 text-[#888]"
             />
 
             <input
               type="text"
               name="rollNo"
               placeholder="Roll Number"
-              onChange={handleChange}
-              className="w-full bg-[#f7f7f7] border border-[#e8e8e8] rounded-2xl pl-14 pr-5 py-4 outline-none focus:border-slate-400 transition"
+              onChange={
+                handleChange
+              }
+              className="px-5 py-4 rounded-md bg-white/95 text-black outline-none"
               required
-            />
-
-          </div>
-
-          {/* PHONE */}
-
-          <div className="relative md:col-span-2">
-
-            <Phone
-              size={18}
-              className="absolute left-5 top-5 text-[#888]"
             />
 
             <input
               type="text"
               name="phone"
               placeholder="Phone Number"
-              onChange={handleChange}
-              className="w-full bg-[#f7f7f7] border border-[#e8e8e8] rounded-2xl pl-14 pr-5 py-4 outline-none focus:border-slate-400 transition"
+              onChange={
+                handleChange
+              }
+              className="md:col-span-2 px-5 py-4 rounded-md bg-white/95 text-black outline-none"
               required
             />
 
-          </div>
+            <button
+              type="submit"
+              className="md:col-span-2 bg-white text-black py-4 rounded-md font-semibold hover:bg-slate-100 transition"
+            >
 
-          {/* BUTTON */}
+              Create Account
+
+            </button>
+
+          </form>
 
           <button
-            type="submit"
-            className="md:col-span-2 mt-3 bg-[#111111] text-white py-5 rounded-2xl font-semibold text-lg hover:scale-[1.01] transition duration-300 shadow-lg"
+            onClick={() =>
+              navigate(
+                "/login"
+              )
+            }
+            className="mt-6 w-full text-white/80 hover:text-white transition"
           >
 
-            Create Account
+            Already have an account? Login
 
           </button>
 
-        </form>
+        </motion.div>
 
-        {/* LOGIN */}
-
-        <button
-          onClick={() =>
-            navigate("/")
-          }
-          className="mt-8 w-full text-[#666666] hover:text-black transition font-medium"
-        >
-
-          Already have an account? Login
-
-        </button>
-
-      </motion.div>
+      </div>
 
     </div>
 

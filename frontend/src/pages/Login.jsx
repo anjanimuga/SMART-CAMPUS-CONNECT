@@ -1,25 +1,18 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-
-import {
-  useNavigate,
-} from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 import API from "../services/api";
+
+import campusHero from "../assets/campus-hero.jpg";
 
 export default function Login() {
 
   const navigate =
     useNavigate();
 
-  const [isRegister,
-    setIsRegister] =
-    useState(false);
-
   const [formData,
     setFormData] =
     useState({
-      name: "",
       email: "",
       password: "",
     });
@@ -42,34 +35,6 @@ export default function Login() {
 
       try {
 
-        // REGISTER
-        if (
-          isRegister
-        ) {
-
-          const res =
-            await API.post(
-              "/register",
-              formData
-            );
-
-          console.log(
-            res.data
-          );
-
-          alert(
-            "Registration successful"
-          );
-
-          setIsRegister(
-            false
-          );
-
-          return;
-
-        }
-
-        // LOGIN
         const res =
           await API.post(
             "/login",
@@ -86,11 +51,6 @@ export default function Login() {
           res.data.token
         );
 
-        console.log(
-          "LOGIN RESPONSE:",
-          res.data
-        );
-
         localStorage.setItem(
           "role",
           res.data.role
@@ -103,7 +63,6 @@ export default function Login() {
           )
         );
 
-        // ADMIN
         if (
           res.data.role ===
           "admin"
@@ -139,177 +98,120 @@ export default function Login() {
 
   return (
 
-    <div className="relative min-h-screen overflow-hidden bg-[#f8f4ff] font-['Outfit'] flex items-center justify-center px-6">
+    <div className="relative min-h-screen overflow-hidden">
 
-      {/* BACKGROUND BLOBS */}
+      {/* BACKGROUND */}
 
-      <motion.div
-        animate={{
-          x: [0, 40, 0],
-          y: [0, -30, 0],
-        }}
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-        }}
-        className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full bg-pink-200/40 blur-[120px]"
+      <img
+        src={campusHero}
+        alt="Campus"
+        className="absolute inset-0 w-full h-full object-cover"
       />
 
-      <motion.div
-        animate={{
-          x: [0, -40, 0],
-          y: [0, 30, 0],
-        }}
-        transition={{
-          duration: 12,
-          repeat: Infinity,
-        }}
-        className="absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-violet-200/40 blur-[120px]"
-      />
+      {/* OVERLAY */}
 
-      {/* LOGIN CARD */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/45 to-black/70" />
 
-      <motion.div
-        initial={{
-          opacity: 0,
-          y: 40,
-        }}
-        animate={{
-          opacity: 1,
-          y: 0,
-        }}
-        transition={{
-          duration: 1,
-        }}
-        className="relative z-10 w-full max-w-md"
-      >
+      {/* CONTENT */}
 
-        <form
-          onSubmit={
-            handleSubmit
-          }
-          className="bg-white/40 backdrop-blur-3xl border border-white/50 rounded-[40px] p-10 shadow-[0_20px_80px_rgba(180,140,255,0.15)]"
+      <div className="relative z-10 min-h-screen flex items-center justify-center px-6">
+
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: 20,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          transition={{
+            duration: 0.5,
+          }}
+          className="w-full max-w-md"
         >
 
-          {/* TOP BADGE */}
+          <form
+            onSubmit={
+              handleSubmit
+            }
+            className="text-center"
+          >
 
-          <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/50 border border-white/50 mb-8">
+            <p className="text-white/70 uppercase tracking-[0.35em] text-xs mb-5">
 
-            <span className="w-3 h-3 rounded-full bg-violet-500" />
+              Student Portal
 
-            <p className="text-slate-700 font-semibold text-sm">
-              CampusConnect Access
             </p>
 
-          </div>
+            <h1
+              className="text-white text-5xl lg:text-6xl mb-4"
+              style={{
+                fontFamily:
+                  "Libre Baskerville",
+              }}
+            >
 
-          {/* HEADING */}
+              CampusConnect
 
-          <h1 className="text-5xl font-black text-slate-900 mb-3 tracking-tight">
+            </h1>
 
-            {
-              isRegister
-                ? "Create Account"
-                : "Welcome Back"
-            }
+            <p className="text-white/80 text-lg mb-10">
 
-          </h1>
+              Student Portal Access
 
-          <p className="text-slate-600 text-lg mb-10 leading-relaxed">
+            </p>
 
-            {
-              isRegister
-                ? "Join your smart campus ecosystem."
-                : "Login to continue your campus experience."
-            }
+            <input
+              type="email"
+              name="email"
+              placeholder="Email Address"
+              onChange={
+                handleChange
+              }
+              className="w-full mb-4 px-5 py-4 rounded-md bg-white/95 text-black outline-none"
+              required
+            />
 
-          </p>
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              onChange={
+                handleChange
+              }
+              className="w-full mb-6 px-5 py-4 rounded-md bg-white/95 text-black outline-none"
+              required
+            />
 
-          {/* NAME */}
+            <button
+              type="submit"
+              className="w-full bg-white text-black py-4 rounded-md font-semibold hover:bg-slate-100 transition"
+            >
 
-          {
+              Login
 
-            isRegister && (
+            </button>
 
-              <input
-                type="text"
-                name="name"
-                placeholder="Full Name"
-                onChange={
-                  handleChange
-                }
-                className="w-full mb-5 px-6 py-5 rounded-3xl bg-white/50 border border-white/50 outline-none text-slate-800 placeholder:text-slate-500 backdrop-blur-xl focus:ring-2 focus:ring-violet-300 transition"
-                required
-              />
+            <button
+              type="button"
+              onClick={() =>
+                navigate(
+                  "/register"
+                )
+              }
+              className="mt-6 text-white/80 hover:text-white transition"
+            >
 
-            )
+              Don't have an account? Register
 
-          }
+            </button>
 
-          {/* EMAIL */}
+          </form>
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Email Address"
-            onChange={
-              handleChange
-            }
-            className="w-full mb-5 px-6 py-5 rounded-3xl bg-white/50 border border-white/50 outline-none text-slate-800 placeholder:text-slate-500 backdrop-blur-xl focus:ring-2 focus:ring-violet-300 transition"
-            required
-          />
+        </motion.div>
 
-          {/* PASSWORD */}
-
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            onChange={
-              handleChange
-            }
-            className="w-full mb-8 px-6 py-5 rounded-3xl bg-white/50 border border-white/50 outline-none text-slate-800 placeholder:text-slate-500 backdrop-blur-xl focus:ring-2 focus:ring-violet-300 transition"
-            required
-          />
-
-          {/* SUBMIT BUTTON */}
-
-          <button
-            type="submit"
-            className="w-full py-5 rounded-3xl bg-gradient-to-r from-violet-500 to-pink-400 text-white text-xl font-semibold shadow-[0_15px_50px_rgba(180,140,255,0.35)] hover:scale-[1.02] transition duration-300"
-          >
-
-            {
-              isRegister
-                ? "Create Account"
-                : "Login"
-            }
-
-          </button>
-
-          {/* TOGGLE BUTTON */}
-
-          <button
-            type="button"
-            onClick={() =>
-              setIsRegister(
-                !isRegister
-              )
-            }
-            className="w-full mt-6 text-slate-600 hover:text-violet-500 transition font-medium"
-          >
-
-            {
-              isRegister
-                ? "Already have an account? Login"
-                : "Don't have an account? Register"
-            }
-
-          </button>
-
-        </form>
-
-      </motion.div>
+      </div>
 
     </div>
 
