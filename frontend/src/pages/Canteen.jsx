@@ -36,9 +36,41 @@ export default function Canteen() {
   const [search, setSearch] =
     useState("");
 
+  const [selectedCategory, setSelectedCategory] =
+  useState("All");
+
   const [selectedFlavours,
     setSelectedFlavours] =
     useState({});
+
+  const promoTexts = [
+  "🍽 Freshly Prepared Every Day",
+  "🚀 Skip The Queue, Order Online",
+  "🥤 Refreshing Drinks & Thickshakes",
+  "⭐ Campus Students' Favourite Meals",
+];
+
+const placeholders = [
+
+  "Search Chicken Biryani...",
+
+  "Search Cold Coffee...",
+
+  "Search French Fries...",
+
+  "Search Sandwich...",
+
+  "Search Thickshakes...",
+
+];
+
+const [placeholderIndex,
+setPlaceholderIndex] =
+useState(0);
+const [promoIndex, setPromoIndex] = useState(0);
+
+  const [activeOrder, setActiveOrder] =
+  useState(null);
 
   // FETCH FOODS
 useEffect(() => {
@@ -59,57 +91,106 @@ useEffect(() => {
     }
   };
 
+
+  const promoInterval = setInterval(() => {
+  setPromoIndex((prev) => (prev + 1) % promoTexts.length);
+}, 2500);
+
+
+const placeholderInterval = setInterval(() => {
+
+  setPlaceholderIndex((prev) =>
+    (prev + 1) % placeholders.length
+  );
+
+}, 2000);
+
   loadFoods();
+  fetchActiveOrder();
 
   return () => {
     mounted = false;
+    clearInterval(placeholderInterval);
+
+    clearInterval(promoInterval);
   };
 
 }, []);
 
-  const fetchFoods =
-    async () => {
 
-console.log("FETCHING FOODS");
 
-      try {
+    const fetchActiveOrder =
+  async () => {
 
-       
+    try {
 
-        const res =
-          await API.get(
-            "/foods"
-          );
-
-        setFoods(
-          res.data
+      const user =
+        JSON.parse(
+          localStorage.getItem("user")
         );
 
-      } catch (error) {
-
-        console.log(error);
-
-        toast.error(
-          "Failed to load menu"
+      const res =
+        await API.get(
+          "/orders/active",
+          {
+            headers: {
+              userid: user._id,
+            },
+          }
         );
 
-      } finally {
+      setActiveOrder(
+        res.data
+      );
 
-        setLoading(false);
+    } catch (error) {
 
-      }
+      console.log(error);
 
-    };
+    }
+
+  };
 
   // FILTER SEARCH
-  const filteredFoods =
-    foods.filter((food) =>
-      food.name
-        .toLowerCase()
-        .includes(
-          search.toLowerCase()
-        )
-    );
+ const categories = [
+  "All",
+  ...new Set(
+    foods.map(
+      (food) => food.category
+    )
+  ),
+];
+
+const filteredFoods =
+foods.filter((food)=>{
+
+  const matchesSearch =
+    food.name
+      .toLowerCase()
+      .includes(
+        search.toLowerCase()
+      );
+
+  const matchesCategory =
+
+    selectedCategory ===
+    "All"
+
+      ? true
+
+      : food.category ===
+        selectedCategory;
+
+  return (
+
+    matchesSearch &&
+    matchesCategory
+
+  );
+
+});
+
+  
 
   // ADD TO CART
   const handleAddToCart =
@@ -226,6 +307,17 @@ console.log("FETCHING FOODS");
 
             </p>
 
+           <motion.p
+  key={promoIndex}
+  initial={{ opacity: 0, y: 12 }}
+  animate={{ opacity: 1, y: 0 }}
+  exit={{ opacity: 0 }}
+  transition={{ duration: 0.4 }}
+  className="text-[#18344f] text-lg font-medium mt-6 mb-8"
+>
+  {promoTexts[promoIndex]}
+</motion.p>
+
           </div>
 
           {/* BUTTONS */}
@@ -262,6 +354,85 @@ console.log("FETCHING FOODS");
 
         </motion.div>
 
+        {activeOrder ? (
+
+  <div className="mb-8 bg-white border border-[#ece7df] rounded-[28px] p-6 shadow-sm">
+
+    <div className="flex justify-between items-center">
+
+      <div>
+
+        <p className="text-sm text-gray-500 mb-2">
+
+          My Current Order
+
+        </p>
+
+        <h2 className="text-2xl font-bold">
+
+          Token #{activeOrder.tokenNumber}
+
+        </h2>
+
+        <p className="text-gray-600 mt-2">
+
+          Status:
+          {" "}
+          <span className="font-semibold">
+
+            {activeOrder.status}
+
+          </span>
+
+        </p>
+
+        <p className="text-gray-500">
+
+          Pickup:
+          {" "}
+          {activeOrder.pickupTime}
+
+        </p>
+
+      </div>
+
+      <button
+        onClick={() =>
+          navigate("/orders")
+        }
+        className="bg-[#18344f] text-white px-5 py-3 rounded-full"
+      >
+
+        View Orders
+
+      </button>
+
+    </div>
+
+  </div>
+
+) : (
+
+  <div className="mb-8 bg-white border border-[#ece7df] rounded-[28px] p-6">
+
+    <h2 className="text-xl font-semibold">
+
+      🍽 No Active Orders
+
+    </h2>
+
+    <p className="text-gray-500 mt-2">
+
+      Browse today's menu and place your first order.
+
+    </p>
+
+  </div>
+
+)}
+
+
+
         {/* SEARCH */}
 
         <motion.div
@@ -287,14 +458,18 @@ console.log("FETCHING FOODS");
 
           <input
             type="text"
-            placeholder="Search food, beverages, snacks..."
+           placeholder={
+  placeholders[
+    placeholderIndex
+  ]
+}
             value={search}
             onChange={(e) =>
               setSearch(
                 e.target.value
               )
             }
-            className="w-full bg-white border border-[#ece7df] rounded-[24px] pl-14 pr-6 py-5 outline-none text-[#1f1b16] placeholder:text-[#8c8378] shadow-sm focus:ring-2 focus:ring-orange-200 transition"
+            className="w-full bg-white border border-[#ece7df] rounded-[24px] pl-14 pr-6 py-5 outline-none text-[#1f1b16] placeholder:text-[#8c8378] shadow-sm focus:ring-4 focus:ring-orange-100 transition"
           />
 
         </motion.div>
@@ -348,6 +523,31 @@ console.log("FETCHING FOODS");
 
 </div>
 
+
+{/* CATEGORY TABS */}
+
+<div className="flex flex-wrap gap-3 mb-10">
+
+  {categories.map((category) => (
+
+    <button
+      key={category}
+      onClick={() =>
+        setSelectedCategory(category)
+      }
+      className={`px-6 py-3 rounded-full transition font-medium ${
+        selectedCategory === category
+          ? "bg-[#18344f] text-white"
+          : "bg-white border border-[#ece7df] text-[#18344f] hover:bg-[#f7f6f2]"
+      }`}
+    >
+      {category}
+    </button>
+
+  ))}
+
+</div>
+
         {/* FOOD GRID */}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
@@ -385,7 +585,22 @@ console.log("FETCHING FOODS");
                 )
               )
 
-            ) : (
+            ) : filteredFoods.length === 0 ? (
+
+  <div className="col-span-full text-center py-20">
+
+    <h2 className="text-3xl font-semibold text-[#18344f]">
+      No items found
+    </h2>
+
+    <p className="text-gray-500 mt-3">
+      Try another search or category.
+    </p>
+
+  </div>
+
+) : (
+
 
               filteredFoods.map(
                 (
@@ -418,6 +633,8 @@ console.log("FETCHING FOODS");
 
                     <div className="relative w-full h-[260px] overflow-hidden bg-[#f2ede6]">
 
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
+
                      <img
   src={
     food.image &&
@@ -429,7 +646,7 @@ console.log("FETCHING FOODS");
   loading="lazy"
   className="w-full h-full object-cover transition duration-500 group-hover:scale-105"
 />
-
+<div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
                       {/* STOCK BADGE */}
 
                       {food.stock <= 0 && (

@@ -6,6 +6,7 @@ const {
   createOrder,
   getOrders,
   updateOrderStatus,
+  getActiveOrder,
 } = require(
   "../controllers/order.controller"
 );

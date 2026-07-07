@@ -10,6 +10,19 @@ export default function Dashboard() {
   );
 
   const [orders, setOrders] = useState([]);
+  const currentHour = new Date().getHours();
+
+let greeting = "Good Evening";
+
+if (currentHour >= 5 && currentHour < 12) {
+  greeting = "Good Morning";
+} else if (currentHour >= 12 && currentHour < 17) {
+  greeting = "Good Afternoon";
+} else if (currentHour >= 17 && currentHour < 21) {
+  greeting = "Good Evening";
+} else {
+  greeting = "Late Night Cravings? No worries, we've got you!";
+}
   const [seat, setSeat] = useState(null);
   const [printRequests, setPrintRequests] = useState([]);
   const [stationeryOrders, setStationeryOrders] = useState([]);
@@ -136,7 +149,7 @@ export default function Dashboard() {
                   "Libre Baskerville",
               }}
             >
-              Good Afternoon,
+              {greeting},
             </h1>
 
             <h2 className="text-white text-3xl lg:text-4xl">
@@ -264,79 +277,125 @@ export default function Dashboard() {
 
         <div className="grid lg:grid-cols-3 gap-8">
 
-          {/* RECENT ACTIVITY */}
+        
+{/* CAMPUS EXPERIENCE */}
 
-          <div className="lg:col-span-2 bg-white rounded-[28px] border border-[#ece7df] p-8 shadow-sm">
+<div className="lg:col-span-2 bg-white rounded-[28px] border border-[#ece7df] p-8 shadow-sm">
 
-            <h2
-              className="text-3xl mb-8"
-              style={{
-                fontFamily:
-                  "Libre Baskerville",
-              }}
-            >
-              Recent Activity
-            </h2>
+  <h2
+    className="text-3xl mb-8"
+    style={{
+      fontFamily: "Libre Baskerville",
+    }}
+  >
+    Campus Experience
+  </h2>
 
-            {orders.length === 0 ? (
+  <div className="grid md:grid-cols-2 gap-8">
 
-              <p className="text-gray-500">
-                No recent activity.
-              </p>
+    <div>
 
-            ) : (
+      <h3 className="text-xl font-semibold mb-3 text-[#18344f]">
+        Learning
+      </h3>
 
-              <div className="space-y-5">
+      <p className="text-gray-600 leading-relaxed">
+        Access quiet study spaces, discover library resources,
+        and stay focused throughout your academic journey.
+      </p>
 
-                {orders
-                  .slice(0, 5)
-                  .map((order) => (
+    </div>
 
-                    <div
-                      key={order._id}
-                      className="flex justify-between items-center border-b border-[#ece7df] pb-4"
-                    >
+    <div>
 
-                      <div>
+      <h3 className="text-xl font-semibold mb-3 text-[#18344f]">
+        Dining
+      </h3>
 
-                        <h3 className="font-medium text-[#111111]">
-                          Order #{order.tokenNumber}
-                        </h3>
+      <p className="text-gray-600 leading-relaxed">
+        Fresh meals prepared daily with quick preordering
+        and convenient pickup across campus.
+      </p>
 
-                        <span
-                          className={`
-                          px-3 py-1 rounded-full text-xs font-medium
-                          ${
-                            order.status === "Completed"
-                              ? "bg-green-100 text-green-700"
-                              : order.status === "Preparing"
-                              ? "bg-yellow-100 text-yellow-700"
-                              : "bg-blue-100 text-blue-700"
-                          }
-                        `}
-                        >
-                          {order.status}
-                        </span>
+    </div>
 
-                      </div>
+    <div>
 
-                      <span className="text-gray-400 text-sm">
+      <h3 className="text-xl font-semibold mb-3 text-[#18344f]">
+        Transportation
+      </h3>
 
-                        {new Date(
-                          order.createdAt
-                        ).toLocaleDateString()}
+      <p className="text-gray-600 leading-relaxed">
+        Stay informed with reliable campus bus schedules
+        and timely transport updates.
+      </p>
 
-                      </span>
+    </div>
 
-                    </div>
+    <div>
 
-                  ))}
+      <h3 className="text-xl font-semibold mb-3 text-[#18344f]">
+        Convenience
+      </h3>
 
-              </div>
+      <p className="text-gray-600 leading-relaxed">
+        Print documents and order stationery essentials
+        whenever you need them.
+      </p>
 
-            )}
+    </div>
 
-          </div>
+  </div>
+
+  <div className="my-10 border-t border-[#ece7df]" />
+
+  <h3
+    className="text-2xl mb-6"
+    style={{
+      fontFamily: "Libre Baskerville",
+    }}
+  >
+    Today's Highlights
+  </h3>
+
+  <div className="grid md:grid-cols-2 gap-5">
+
+    <div className="flex items-center gap-3">
+      <span className="text-[#18344f] text-xl">•</span>
+      Healthy meals available at the campus canteen
+    </div>
+
+    <div className="flex items-center gap-3">
+      <span className="text-[#18344f] text-xl">•</span>
+      Library study spaces open for booking
+    </div>
+
+    <div className="flex items-center gap-3">
+      <span className="text-[#18344f] text-xl">•</span>
+      Print services available throughout the day
+    </div>
+
+    <div className="flex items-center gap-3">
+      <span className="text-[#18344f] text-xl">•</span>
+      Campus buses running on regular schedule
+    </div>
+
+  </div>
+
+  <div className="mt-10 pt-8 border-t border-[#ece7df]">
+
+    <p
+      className="text-2xl italic text-center text-[#18344f]"
+      style={{
+        fontFamily: "Libre Baskerville",
+      }}
+    >
+      "Designed to make every campus day simpler."
+    </p>
+
+  </div>
+
+</div>
 
           {/* ANNOUNCEMENTS */}
 
